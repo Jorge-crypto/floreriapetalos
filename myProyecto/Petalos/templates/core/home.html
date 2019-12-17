@@ -1,0 +1,54 @@
+{% extends "core/base.html" %}
+{% block titulo %}
+Floreria Petalos
+{% endblock titulo %}
+{% load static %}
+
+{% block contenido %}
+
+
+<center>
+
+    <body class="fondo">
+        <div>
+            <div class="salir">
+                <button type="button" class="btn btn-dark" onclick="javascript:location.href='{% url 'LOGOUT' %}'">Log
+                    Out</button>
+            </div>
+
+           
+            <h1> Floreria Petalos </h1>
+                <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner">
+                        <div class="carousel-item active" class="imgcarrusel">
+                            <img src="/static/img/carrusel1.png" width="350px"; height="350px" >
+                        </div>
+                        <div class="carousel-item" class="imgcarrusel">
+                            <img src="/static/img/carrusel2.png" width="350px"; height="350px">
+                        </div>
+                        <div class="carousel-item" class="imgcarrusel">
+                            <img src="/static/img/carrusel3.png" width="350px"; height="350px">
+                        </div>
+                    </div>
+                    <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
+
+        </div>
+
+        <div class="mapa">
+            <p class="letras">En el centro de santiago!</p>
+            <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d37666.257313237606!2d-70.65906833011557!3d-33.44257779712186!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0xe0ddd816f4d96510!2sFloreria%20a%20Domicilio%20-%20Floreria%20Green%20Garden!5e0!3m2!1ses-419!2scl!4v1575944284057!5m2!1ses-419!2scl"
+                width="550" height="350" frameborder="0" style="border:0;" allowfullscreen=""></iframe>
+        </div>
+
+    </body>
+</center>
+{% endblock contenido %}

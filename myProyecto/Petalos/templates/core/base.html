@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+{% load pwa %}
+
+{% progressive_web_app_meta %}
+{% load static%}
+
+
+<head>
+  <link href="{% static 'css/estilos_floreria.css' %}" type="text/css" rel="stylesheet">
+  <title>
+    {% block titulo %}
+
+    {% endblock titulo %}
+  </title>
+
+
+
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+
+  <script src="https://www.gstatic.com/firebasejs/3.9.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/3.9.0/firebase-messaging.js"></script>
+
+  <!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+
+  <script>
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
+      apiKey: "AIzaSyAJVzwEnxQcAYbPKXYnLCGzO2sZnmI5J4Y",
+      authDomain: "floreria-40153.firebaseapp.com",
+      databaseURL: "https://floreria-40153.firebaseio.com",
+      projectId: "floreria-40153",
+      storageBucket: "floreria-40153.appspot.com",
+      messagingSenderId: "534920271677",
+      appId: "1:534920271677:web:824ee0f66f961331811754"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+
+    let messaging = firebase.messaging();
+
+    navigator.serviceWorker
+            .register('./serviceworker.js')
+            .then(function(register) {
+
+                messaging.useServiceWorker(register);
+
+                messaging.requestPermission()
+                    .then(function() {
+                        console.log("el usuario acepto recibir notificaciones")
+
+                        return messaging.getToken();
+
+                    })
+                    .then(function(token) {
+                        console.log(token);
+
+                        fetch('guardar-token/', {
+                                method: 'post',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Accept': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    'token': token
+                                })
+                            })
+                            .then(function(resultado) {
+                                console.log("se guardo el token")
+                            })
+                            .catch(function(e) {
+                                console.log("no se pudo guardar el token")
+                            })
+                    })
+                    .catch(function(e) {
+                        console.log("el usuario no ha aceptado")
+                    })
+            })
+
+        //programamos la recepcion de las notiicaciones push
+
+        
+        messaging.onMessage(function(payload) {
+
+            let data = payload;
+            console.log(data);
+
+            let title = payload.notification.title;
+
+            let options = {
+                body: payload.notification.body,
+                icon: payload.notification.icon
+            }
+
+            let mensaje = new Notification(title, options);
+
+        })
+
+
+  </script>
+</head>
+
+<body>
+
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"></script>
+
+  <nav>
+    <ol>
+      <li>
+        <a href="{% url 'HOME' %}"> Home</a>
+      </li>
+      <li>
+        <a href="{% url 'GALE' %}"> Galeria</a>
+      </li>
+      <li>
+        <a href="{% url 'FORMU' %}"> Formulario</a>
+      </li>
+      <li>
+        <a href="{% url 'CARRI' %}">Carrito</a>
+      </li>
+      <li>
+        <b>Bienvenido {{ user.username }}</b>
+      </li>
+
+    </ol>
+  </nav>
+  <section>
+    {% block contenido %}
+
+    {% endblock contenido %}
+  </section>
+</body>
+
+</html>
